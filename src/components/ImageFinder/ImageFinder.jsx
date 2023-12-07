@@ -10,6 +10,7 @@ export class ImageFinder extends React.Component {
     hits: [],
     loading: false,
     error: null,
+    page: 1,
   }
 
   async componentDidMount() {
@@ -19,7 +20,21 @@ export class ImageFinder extends React.Component {
     } catch (error) {
       console.log(error.message)
     }
+  }
 
+  async componentDidUpdate(_, prevState) {
+    if (prevState.page !== this.state.page) {
+      try {
+        const { hits } = await fetchPosts({ page: this.state.page })
+        this.setState(prevState => ({ hits: [...prevState.hits, ...hits] }))
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+  }
+
+  handleLoadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }))
   }
 
   render() {
@@ -27,8 +42,10 @@ export class ImageFinder extends React.Component {
     return (<>
       <Searchbar />
       <ImageGallery hits={hits} />
-      <Button />
+      {/* <Button onClick={this.handleLoadMore} /> */}
+      <button onClick={this.handleLoadMore}> button load temp </button>
       <Modal />
     </>)
   }
 }
+
