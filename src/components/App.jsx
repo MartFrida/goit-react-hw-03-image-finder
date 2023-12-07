@@ -1,16 +1,7 @@
-import { Button } from "./Button/Button";
-import { ImageGallery } from "./ImageGallery/ImageGallery";
-import { Modal } from "./Modal/Modal";
-import { Searchbar } from "./Searchbar/Searchbar";
-
+import { ImageFinder } from "./ImageFinder/ImageFinder";
 
 export const App = () => {
   return (
-    <>
-      <Searchbar />
-      <ImageGallery />
-      <Button />
-      <Modal />
-    </>
+    <ImageFinder />
   );
 };
