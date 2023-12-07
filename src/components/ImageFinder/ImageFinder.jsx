@@ -4,6 +4,7 @@ import { ImageGallery } from 'components/ImageGallery/ImageGallery'
 import { Modal } from 'components/Modal/Modal'
 import { Searchbar } from 'components/Searchbar/Searchbar'
 import { fetchPosts } from 'services/api'
+import { Loader } from 'components/Loader/Loader'
 
 export class ImageFinder extends React.Component {
   state = {
@@ -12,14 +13,18 @@ export class ImageFinder extends React.Component {
     error: null,
     page: 1,
     searchQuery: '',
+    totalPosts: null,
   }
 
   async componentDidMount() {
     try {
-      const { hits } = await fetchPosts()
-      this.setState({ hits })
+      this.setState({ loading: true })
+      const { hits, total } = await fetchPosts()
+      this.setState({ hits, totalPosts: total })
     } catch (error) {
       console.log(error.message)
+    } finally {
+      this.setState({ loading: false })
     }
   }
 
@@ -30,19 +35,25 @@ export class ImageFinder extends React.Component {
   async componentDidUpdate(_, prevState) {
     if (!this.state.searchQuery && prevState.page !== this.state.page) {
       try {
-        const { hits } = await fetchPosts({ page: this.state.page })
-        this.setState(prevState => ({ hits: [...prevState.hits, ...hits] }))
+        this.setState({ loading: true })
+        const { hits, total } = await fetchPosts({ page: this.state.page })
+        this.setState(prevState => ({ hits: [...prevState.hits, ...hits], totalPosts: total }))
       } catch (error) {
         console.log(error.message)
+      } finally {
+        this.setState({ loading: false })
       }
     }
 
     if (prevState.searchQuery !== this.state.searchQuery || prevState.page !== this.state.page) {
       try {
-        const { hits } = await fetchPosts({ q: this.state.searchQuery, page: this.state.page })
-        this.setState(prevState => ({ hits: [...prevState.hits, ...hits] }))
+        this.setState({ loading: true })
+        const { hits, total } = await fetchPosts({ q: this.state.searchQuery, page: this.state.page })
+        this.setState(prevState => ({ hits: [...prevState.hits, ...hits], totalPosts: total }))
       } catch (error) {
         console.log(error.message)
+      } finally {
+        this.setState({ loading: false })
       }
     }
   }
@@ -52,12 +63,15 @@ export class ImageFinder extends React.Component {
   }
 
   render() {
-    const { hits } = this.state
+    const { hits, totalPosts, loading } = this.state
     return (<>
       <Searchbar handleSetSearchQuery={this.handleSetSearchQuery} />
       <ImageGallery hits={hits} />
       {/* <Button onClick={this.handleLoadMore} /> */}
-      <button onClick={this.handleLoadMore}> button load temp </button>
+      {!hits.length && !loading && <h2>Smth's wrong.. Don't worry.. Nothing really matters. Try again!</h2>}
+      {loading && <Loader />}
+      {hits.length && hits.length < totalPosts ? <button onClick={this.handleLoadMore}> {loading ? 'Loading' : 'Load more'} </button>
+        : null}
       <Modal />
     </>)
   }
