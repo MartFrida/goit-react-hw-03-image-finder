@@ -11,6 +11,7 @@ export class ImageFinder extends React.Component {
     loading: false,
     error: null,
     page: 1,
+    searchQuery: '',
   }
 
   async componentDidMount() {
@@ -22,10 +23,23 @@ export class ImageFinder extends React.Component {
     }
   }
 
+  handleSetSearchQuery = (text) => {
+    this.setState({ searchQuery: text, hits: [], page: 1 })
+  }
+
   async componentDidUpdate(_, prevState) {
-    if (prevState.page !== this.state.page) {
+    if (!this.state.searchQuery && prevState.page !== this.state.page) {
       try {
         const { hits } = await fetchPosts({ page: this.state.page })
+        this.setState(prevState => ({ hits: [...prevState.hits, ...hits] }))
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+
+    if (prevState.searchQuery !== this.state.searchQuery || prevState.page !== this.state.page) {
+      try {
+        const { hits } = await fetchPosts({ q: this.state.searchQuery, page: this.state.page })
         this.setState(prevState => ({ hits: [...prevState.hits, ...hits] }))
       } catch (error) {
         console.log(error.message)
@@ -40,7 +54,7 @@ export class ImageFinder extends React.Component {
   render() {
     const { hits } = this.state
     return (<>
-      <Searchbar />
+      <Searchbar handleSetSearchQuery={this.handleSetSearchQuery} />
       <ImageGallery hits={hits} />
       {/* <Button onClick={this.handleLoadMore} /> */}
       <button onClick={this.handleLoadMore}> button load temp </button>
