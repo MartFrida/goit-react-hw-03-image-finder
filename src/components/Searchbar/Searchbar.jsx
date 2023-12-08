@@ -23,8 +23,7 @@ export class Searchbar extends React.Component {
         <form className={s.form} onSubmit={this.handleSubmit}>
 
           <button className={s.button}>
-            <FaSearchengin width='2em' height='2em' />
-            {/* <span className={s.buttonLabel}>Search</span> */}
+            <FaSearchengin size={25} />
           </button>
 
           <input
@@ -32,10 +31,7 @@ export class Searchbar extends React.Component {
             onChange={this.handleChangeQuery}
             className={s.input}
             type="text"
-            // autoComplete="off"
-            // autoFocus
             placeholder="Search images and photos"
-
           />
         </form>
       </header>
