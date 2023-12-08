@@ -29,7 +29,7 @@ export class Modal extends React.Component {
       <div className={clsx(s.overlay)} onClick={this.clickOutside}>
         <div className={clsx(s.modal)}>
           {children}
-          <button onClick={handleCloseModal}>X</button>
+          <button className={clsx(s.closeButton)} onClick={handleCloseModal}>X</button>
         </div>
       </div>
     )

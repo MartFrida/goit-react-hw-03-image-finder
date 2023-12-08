@@ -21,7 +21,7 @@ export class ImageGallery extends React.Component {
     const { isOpenModal } = this.state
     return (
       <>
-        <div className={clsx(s.ImageGallery)}>
+        <div className={clsx(s.imageGallery)}>
           {hits.map(item =>
             <ImageGalleryItem handleShowModal={this.handleShowModal} key={item.id} {...item} />
           )}
