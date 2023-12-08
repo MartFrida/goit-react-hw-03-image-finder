@@ -68,8 +68,6 @@ export class ImageFinder extends React.Component {
       <ImageGallery hits={hits} />
       {!hits.length && !loading && <h2>Smth's wrong.. Don't worry.. Nothing really matters. Try again!</h2>}
       {loading && <Loader />}
-      {/* {hits.length && hits.length < totalPosts ? <button onClick={this.handleLoadMore}> {loading ? 'Loading' : 'Load more'} </button>
-        : null} */}
       {hits.length && hits.length < totalPosts ? <Button onHandleClick={this.handleLoadMore}>{loading ? 'Loading' : 'Load more'} </Button> : null}
     </>)
   }

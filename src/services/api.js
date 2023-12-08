@@ -8,7 +8,7 @@ export const fetchPosts = async configParams => {
       key: '40695765-d4632d96e5d94e604b3421ed4',
       image_type: 'photo',
       orientation: 'horizontal',
-      per_page: 4,
+      per_page: 12,
       q: 'cat',
       ...configParams,
     }
