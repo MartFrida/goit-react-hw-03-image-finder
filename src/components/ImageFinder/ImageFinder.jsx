@@ -32,18 +32,6 @@ export class ImageFinder extends React.Component {
   }
 
   async componentDidUpdate(_, prevState) {
-    if (!this.state.searchQuery && prevState.page !== this.state.page) {
-      try {
-        this.setState({ loading: true })
-        const { hits, total } = await fetchPosts({ page: this.state.page })
-        this.setState(prevState => ({ hits: [...prevState.hits, ...hits], totalPosts: total }))
-      } catch (error) {
-        console.log(error.message)
-      } finally {
-        this.setState({ loading: false })
-      }
-    }
-
     if (prevState.searchQuery !== this.state.searchQuery || prevState.page !== this.state.page) {
       try {
         this.setState({ loading: true })
